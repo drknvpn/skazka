@@ -161,7 +161,7 @@ function App() {
         </section>
 
         <section id="gallery" className="section-wrap gallery-section">
-          <div className="section-heading gallery-heading"><div><span className="eyebrow">Загляните внутрь</span><h2>Здесь <em>уютно.</em></h2></div><p>Нажмите на фотографию, чтобы рассмотреть детали. В галерею можно добавить ещё 4 снимка — замените пустые карточки прямыми ссылками на изображения.</p></div>
+          <div className="section-heading gallery-heading"><div><span className="eyebrow">Загляните внутрь</span><h2>Здесь <em>уютно.</em></h2></div><p>Нажмите на фотографию, чтобы рассмотреть детали.</p></div>
           <div className="gallery-grid">{gallery.map((photo, index) => photo.src ? <button className={index === 0 ? 'gallery-item gallery-featured' : 'gallery-item'} key={photo.src} onClick={() => setSelectedPhoto(index)}><img src={photo.src} alt={photo.alt} /><span className="gallery-number">0{index + 1}</span></button> : <div className="gallery-item gallery-empty" key={`empty-${index}`}><span>{String(index + 1).padStart(2, '0')}</span><p>Фото скоро появится</p></div>)}</div>
         </section>
 
