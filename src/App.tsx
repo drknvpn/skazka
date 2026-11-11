@@ -145,7 +145,7 @@ function App() {
             <div className="phone-row"><a href="tel:+79028282858">+7 (902) 828-28-58</a><a href="tel:+73467337272">+7 (3467) 33-72-72</a></div>
             <p>Позвоните нам — подберём удобное время и ответим на вопросы.</p>
           </div>
-          <div className="price-block"><span className="panel-kicker">Стоимость</span><strong>1 000 ₽</strong><span>за 1 час</span></div>
+          <div className="price-block"><span className="panel-kicker">Стоимость</span><strong>1 500 ₽</strong><span>за 1 час</span></div>
           <div className="gift-block"><span className="gift-icon"><Sparkles size={18} /></span><div><span className="panel-kicker">Особое предложение</span><strong>5 часов + 1 в подарок</strong></div></div>
         </section>
 
