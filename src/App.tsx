@@ -42,7 +42,7 @@ const gallery = [
 
 const benefits = [
   { icon: Flame, title: 'Настоящая парная', text: 'Тёплое дерево, мягкий пар и приятный свет для полноценного отдыха.' },
-  { icon: Utensils, title: 'Мангальная зона', text: 'Мангал находится на улице — можно готовить на свежем воздухе.' },
+  { icon: Utensils, title: 'Мангальная зона', text: 'Мангал находится на улице — можно устроить уютный ужин на свежем воздухе.' },
   { icon: Sparkles, title: 'Всё для компании', text: 'Комната отдыха, телевизор и пространство, где удобно проводить время вместе.' },
 ];
 
@@ -68,6 +68,7 @@ function App() {
 
   useEffect(() => {
     const loadReviews = async () => {
+      if (!supabase) return;
       const { data, error } = await supabase
         .from('public_reviews')
         .select('id, author_name, rating, review_text, source, created_at')
@@ -79,6 +80,10 @@ function App() {
 
   const submitReview = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!supabase) {
+      setReviewStatus('error');
+      return;
+    }
     setReviewStatus('loading');
     const { data, error } = await supabase
       .from('public_reviews')
