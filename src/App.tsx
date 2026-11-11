@@ -123,7 +123,7 @@ function App() {
       <main id="top">
         <section className="hero section-wrap">
           <div className="hero-copy">
-            <div className="eyebrow"><span className="eyebrow-dot" /> Ханты-Мансийск · уютный отдых</div>
+            <div className="eyebrow"><span className="eyebrow-dot" /> Ханты-Мансийск · Школьная 3/1</div>
             <h1>Тепло, тишина<br /><em>и свои люди.</em></h1>
             <p className="hero-text">Сауна для тех, кто ценит спокойный отдых, живое тепло дерева и время, которое хочется запомнить.</p>
             <div className="hero-actions">
