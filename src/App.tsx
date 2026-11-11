@@ -134,7 +134,7 @@ function App() {
           </div>
           <div className="hero-visual">
             <img src={gallery[0].src} alt={gallery[0].alt} />
-            <div className="image-label"><span>01</span><span>комната отдыха</span></div>
+            <div className="image-label"><span>01</span><span>Ориентир с улицы</span></div>
             <div className="hero-stamp"><Sparkles size={17} /><span>место<br /><strong>для отдыха</strong></span></div>
           </div>
         </section>
