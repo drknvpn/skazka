@@ -8,25 +8,13 @@ import {
   Leaf,
   MapPin,
   Menu,
-  MessageCircle,
   ExternalLink,
   Phone,
   Sparkles,
   Star,
-  Send,
   Utensils,
   X,
 } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
-
-type Review = {
-  id: string;
-  author_name: string;
-  rating: number;
-  review_text: string;
-  source: string;
-  created_at: string;
-};
 
 const gallery = [
     { src: '/images/kaknayti.webp', alt: 'Ориентир с улицы' },
@@ -49,9 +37,6 @@ const benefits = [
 function App() {
   const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [reviewForm, setReviewForm] = useState({ name: '', rating: 5, text: '' });
-  const [reviewStatus, setReviewStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const closePhoto = () => setSelectedPhoto(null);
 
@@ -65,39 +50,6 @@ function App() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedPhoto]);
-
-  useEffect(() => {
-    const loadReviews = async () => {
-      if (!supabase) return;
-      const { data, error } = await supabase
-        .from('public_reviews')
-        .select('id, author_name, rating, review_text, source, created_at')
-        .order('created_at', { ascending: false });
-      if (!error && data) setReviews(data as Review[]);
-    };
-    void loadReviews();
-  }, []);
-
-  const submitReview = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!supabase) {
-      setReviewStatus('error');
-      return;
-    }
-    setReviewStatus('loading');
-    const { data, error } = await supabase
-      .from('public_reviews')
-      .insert({ author_name: reviewForm.name.trim(), rating: reviewForm.rating, review_text: reviewForm.text.trim() })
-      .select('id, author_name, rating, review_text, source, created_at')
-      .maybeSingle();
-    if (error || !data) {
-      setReviewStatus('error');
-      return;
-    }
-    setReviews((current) => [data as Review, ...current]);
-    setReviewForm({ name: '', rating: 5, text: '' });
-    setReviewStatus('success');
-  };
 
   const selectedImage = selectedPhoto === null ? null : gallery[selectedPhoto];
 
@@ -171,10 +123,6 @@ function App() {
             <a className="source-card" href="https://yandex.ru/maps/57/khanty-mansiysk/?ll=69.048402%2C60.984829&mode=poi&poi%5Bpoint%5D=69.048240%2C60.984830&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D7021927256&tab=reviews&z=21" target="_blank" rel="noreferrer"><span className="source-logo yandex-logo">Я</span><span><strong>Отзывы на Яндексе</strong><small>Открыть все отзывы</small></span><ExternalLink size={16} /></a>
             <a className="source-card" href="https://2gis.ru/kh_mansiysk/firm/70000001029022778/tab/reviews" target="_blank" rel="noreferrer"><span className="source-logo gis-logo">2Г</span><span><strong>Отзывы в 2ГИС</strong><small>Открыть все отзывы</small></span><ExternalLink size={16} /></a>
             <a className="source-card" href="https://vk.ru/club178376068" target="_blank" rel="noreferrer"><span className="source-logo vk-logo">vk</span><span><strong>Мы ВКонтакте</strong><small>Перейти в группу</small></span><ExternalLink size={16} /></a>
-          </div>
-          <div className="reviews-layout">
-            <div className="review-list">{reviews.length ? reviews.map((review) => <article className="review-card glass-card" key={review.id}><div className="review-card-top"><span className="review-stars">{Array.from({ length: 5 }, (_, index) => <Star key={index} size={13} fill={index < review.rating ? 'currentColor' : 'none'} />)}</span><time>{new Date(review.created_at).toLocaleDateString('ru-RU')}</time></div><p>«{review.review_text}»</p><strong>{review.author_name}</strong></article>) : <div className="review-empty glass-card"><MessageCircle size={22} /><p>Пока здесь нет отзывов с сайта.<br />Будьте первым гостем, который поделится впечатлением.</p></div>}</div>
-            <form className="review-form glass-card" onSubmit={submitReview}><div className="form-title"><MessageCircle size={19} /><strong>Оставить отзыв</strong></div><label>Ваше имя<input required minLength={2} maxLength={60} value={reviewForm.name} onChange={(event) => setReviewForm({ ...reviewForm, name: event.target.value })} placeholder="Как к вам обращаться" /></label><label>Оценка<div className="rating-input">{[1, 2, 3, 4, 5].map((value) => <button type="button" className={value <= reviewForm.rating ? 'rating-button active' : 'rating-button'} key={value} onClick={() => setReviewForm({ ...reviewForm, rating: value })} aria-label={`${value} из 5`}><Star size={19} fill="currentColor" /></button>)}</div></label><label>Ваш отзыв<textarea required minLength={10} maxLength={700} value={reviewForm.text} onChange={(event) => setReviewForm({ ...reviewForm, text: event.target.value })} placeholder="Расскажите, как всё прошло" /></label><button className="button button-primary review-submit" type="submit" disabled={reviewStatus === 'loading'}><Send size={15} /> {reviewStatus === 'loading' ? 'Отправляем…' : 'Опубликовать отзыв'}</button>{reviewStatus === 'success' && <p className="form-message success-message">Спасибо! Ваш отзыв уже опубликован.</p>}{reviewStatus === 'error' && <p className="form-message error-message">Не получилось отправить отзыв. Попробуйте ещё раз.</p>}</form>
           </div>
         </section>
 
